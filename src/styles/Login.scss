@@ -1,0 +1,29 @@
+.loginWrap{
+  width:100%;
+  padding-top:30px;
+  height:100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  .loginInput{
+    width:150px;
+    height:20px;
+    display: block;
+    padding-left:12px;
+    border-radius: 5px;
+    border:lightblue 2px solid;
+  }
+  .loginInputSub{
+    @extend .loginInput;
+    padding:0;
+    width:166px;
+    background: #000000;
+    margin-top:10px;
+    font-size: 16px;
+    height:24px;
+    color:#fff;
+    letter-spacing: 5px;
+    font-family: "黑体", "Arial";
+  }
+}
