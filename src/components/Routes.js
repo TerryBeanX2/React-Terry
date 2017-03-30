@@ -1,47 +1,17 @@
-import React from 'react'
+import React from 'react';
 import {
     BrowserRouter as Router,
     Route,
     Link
-} from 'react-router-dom'
+} from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
 import Welcome from './Welcome';
 import Login from './Login';
-import ajax from './Ajax';
+import List from './List';
+import ajax from './Ajax'
+import config from './Config';
 
-
-const List = ({ match }) => (
-    <div>
-        <h2>Topics</h2>
-        <ul>
-            <li>
-                <Link to={`${match.url}/rendering`}>
-                    Rendering with React
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/components`}>
-                    Components
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/props-v-state`}>
-                    Props v. State
-                </Link>
-            </li>
-        </ul>
-
-        <Route path={`${match.url}/:topicId`} component={ListItem}/>
-        <Route exact path={match.url} render={() => (
-            <h3>Please select a topic.</h3>
-        )}/>
-    </div>
-)
-
-const ListItem = ({ match }) => (
-    <div>
-        <h3>{match.params.topicId}</h3>
-    </div>
-)
+const history = createHistory();
 
 export default class BasicExample extends React.Component{
     constructor(props,context){
@@ -51,18 +21,21 @@ export default class BasicExample extends React.Component{
         }
     }
     componentWillMount(){
-        ajax('http://172.16.218.71:8080/mam/user/isRemembered',null, (data)=> {
-            console.log(data);
+        ajax(`${config.address}user/isRemembered`,null, (data)=> {
             if(data.retCode == '00000'){
                 this.setState({isLogin:true})
             }
         })
+    }
+    handelLoginState(bool){
+        this.setState({isLogin:bool})
     }
     render(){
         if(this.state.isLogin){
             return(
                 <Router>
                     <div>
+                        <div className="logOut" onClick={()=>this.handelLoginState(false)} style={{width:'50px',height:'20px',textAline:'center',fontSize:'14px',lineHeight:'20px',position:'fixed',top:10,right:10,background:'#fff'}}>退出</div>
                         <ul className="nav">
                             <li><Link to="/">欢迎</Link></li>
                             <li><Link to="/List">用户列表</Link></li>
@@ -74,6 +47,7 @@ export default class BasicExample extends React.Component{
                 </Router>
             )
         }else{
+            history.push('/');
             return(
                 <Router>
                     <div>
@@ -81,7 +55,9 @@ export default class BasicExample extends React.Component{
                             <li><Link to="/">登录</Link></li>
                         </ul>
                         <hr/>
-                        <Route exact path="/" component={Login}/>
+                        <Route exact path="/" children={()=>(
+                            <Login loginChange={bool=>this.handelLoginState(bool)} />
+                        )}/>
                     </div>
                 </Router>
             )

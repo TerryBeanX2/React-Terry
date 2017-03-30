@@ -3,9 +3,9 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import $ from 'jquery-ajax';
-
+import FastClick from '../vendor/fastclick';
 import Login from  './Routes';
-
+FastClick.attach(document.body);
 
 class App extends React.Component{
     constructor(props,context){
